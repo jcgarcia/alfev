@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h3>Cancel reservation <small ng-bind="$ctrl.reservationId"></small></h3>
+</div>
+<div class="modal-body form-horizontal">
+
+
+    <form ng-if="$ctrl.paymentInfo" >
+        <div class="alert alert-warning text-center" ng-if="$ctrl.paymentInfo.paymentInformations.paidAmount !== '0.00' && !$ctrl.paymentInfo.supportRefund"><i class="fa fa-warning"></i> This reservation cannot be refunded automatically.</div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Payment method</label>
+            <div class="col-sm-8 form-control-static" ng-bind="$ctrl.paymentInfo.paymentMethod"></div>
+        </div>
+        <div class="form-group" ng-if="$ctrl.paymentInfo.transaction">
+            <label class="col-sm-4 control-label">Transaction timestamp</label>
+            <div class="col-sm-8 form-control-static" ng-bind="$ctrl.paymentInfo.transaction.timestamp | formatDate"></div>
+        </div>
+        <div class="form-group" ng-if="$ctrl.paymentInfo.paymentInformations">
+            <label class="col-sm-4 control-label">Paid amount</label>
+            <div class="col-sm-8 form-control-static">{{$ctrl.paymentInfo.paymentInformations.paidAmount}} {{$ctrl.paymentInfo.transaction.currency || $ctrl.event.currencyCode}}</div>
+        </div>
+        <div class="form-group" ng-if="$ctrl.paymentInfo.supportRefund">
+            <div class="col-sm-offset-4 col-sm-8 checkbox">
+                <label><input type="checkbox" ng-model="$ctrl.refund"> Refund {{$ctrl.paymentInfo.paymentInformations.paidAmount}} {{$ctrl.paymentInfo.transaction.currency || $ctrl.event.currencyCode}}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8 checkbox">
+                <label><input type="checkbox" ng-model="$ctrl.notify"> Notify ticket owner</label>
+            </div>
+        </div>
+    </form>
+    <div ng-if="!$ctrl.paymentInfo">
+        loading...
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-md-4 col-md-push-8 col-xs-12">
+            <button class="btn btn-lg btn-danger btn-block btn-block-xs" ng-disabled="$ctrl.submitted" type="button" data-ng-click="$ctrl.confirmRemove()">Cancel reservation</button>
+        </div>
+        <div class="col-md-4 col-md-pull-4 col-xs-12">
+            <button class="btn btn-lg btn-default btn-block btn-block-xs" type="button" data-ng-click="$ctrl.onCancel()">Close</button>
+        </div>
+    </div>
+</div>

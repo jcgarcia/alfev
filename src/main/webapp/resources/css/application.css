@@ -1,0 +1,207 @@
+body {
+    background-color: #E5E5E5;
+}
+
+
+div.col-md-8.col-md-offset-2 {
+    background-color:white;
+}
+
+div.col-md-8.col-md-offset-2 > div {
+    padding-top:1em;
+    padding-bottom:1em;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.event-description {
+    margin-top:1em;
+}
+
+.img-center {
+    margin:auto;
+}
+
+div.header {
+    max-height:100px;
+}
+
+div.header img.img-responsive {
+    max-height: 100px;
+}
+
+.alfio-lang {
+    background-color:transparent;
+}
+
+.event-expired {
+    color:#bbb;
+}
+
+p.ticket-info {
+    padding:15px;
+    margin-top:10px;
+}
+
+.hide-by-default {
+    display: none;
+}
+
+.show-by-default {
+
+}
+
+.no-margin-bottom {
+    margin-bottom:0;
+}
+
+.bank-account-owner-info {
+    padding-left:1em;
+    margin-bottom:0;
+}
+
+
+.list-group-item {
+    border-left:none;
+    border-right:none;
+}
+
+.list-group-item:first-child {
+    border-top:none;
+}
+
+.list-group-item:last-child {
+    border-bottom:none;
+}
+
+.ticket-category-restricted-true {
+    background-color: #F5F5DC
+}
+
+.center {
+    text-align: center;
+}
+
+.wMarginBottom {
+    margin-bottom: 20px;
+}
+
+.wMarginTop {
+    margin-top:20px;
+}
+
+body {
+  counter-reset: ticket-counter;
+}
+
+.ticket-counter:before {
+    counter-increment: ticket-counter;
+    content: counter(ticket-counter)
+}
+
+.ticket-header-col {
+    width:150px;
+    vertical-align: top;
+}
+
+.payment-method-container {
+    width:80%;
+}
+
+.alfio-event-add-to-calendar {
+    padding-left: 13px;
+}
+
+.alfio-event-add-to-calendar > span:before {
+    content: "\00a0 "
+}
+
+a.no-decoration {
+    text-decoration:none;
+}
+
+@media screen and (max-width: 767px) {
+    .xs-payment-method {
+        width:100%;
+        margin-bottom: 5px;
+    }
+    .j-btn-group {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .wizard a:not(current) {padding: 12px 12px 10px 12px; background:#efefef; position:relative; display:inline-block; width:20%}
+    .wizard a.current {width:50%}
+}
+
+@media screen and (min-width: 768px) {
+    li img.logo {
+        margin-top:20px;
+    }
+    .j-btn-group {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: separate;
+    }
+    .j-btn-group > .btn,
+    .j-btn-group > .btn-group {
+        display: table-cell;
+        float: none;
+        width: 1%;
+    }
+}
+
+div.preformatted {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* source: https://github.com/twbs/bootstrap/issues/1982#issuecomment-7814657 thank you @ghost! :) */
+.wizard a {padding: 12px 12px 10px 12px; background:#efefef; position:relative; display:inline-block; width:31%}
+.wizard a:before {width:0; height:0; border-top: 20px inset transparent; border-bottom: 20px inset transparent; border-left: 20px solid #fff; position: absolute; content: ""; top: 0; left: 0;}
+.wizard a:after {width:0; height:0; border-top: 20px inset transparent; border-bottom: 20px inset transparent; border-left: 20px solid #efefef; position: absolute; content: ""; top: 0; right: -20px; z-index:2;}
+.wizard a:first-child:before {border:none;}
+.wizard a:last-child:after {border:none;}
+
+.wizard a:first-child {-moz-border-radius: 4px 0 0 4px; -webkit-border-radius: 4px 0 0 4px; border-radius:   4px 0 0 4px;}
+.wizard a:last-child {-moz-border-radius: 0 4px 4px 0; -webkit-border-radius: 0 4px 4px 0; border-radius:   0 4px 4px 0;}
+
+.wizard .badge {margin:0 5px 0 18px; position:relative; top:-1px;}
+.wizard a:first-child .badge {margin-left:0;}
+
+.wizard .current {background:#007ACC; color:#fff;}
+.wizard .current:after {border-left-color:#007ACC;}
+.wizard a:hover { text-decoration: none; } .wizard a:not(.current):hover { color:#08C; }
+.badge-inverse {color:#777; background-color: white}
+
+.wMarginTop30px {
+    margin-top: 30px;
+}
+.wMarginBottom30px {
+    margin-bottom: 30px;
+}
+
+.alfio-lang a {
+}
+
+html[lang=nl] .alfio-lang a[lang=nl] {
+    font-weight:bold;
+}
+
+html[lang=de] .alfio-lang a[lang=de] {
+    font-weight:bold;
+}
+
+html[lang=en] .alfio-lang a[lang=en] {
+    font-weight:bold;
+}
+
+html[lang=it] .alfio-lang a[lang=it] {
+    font-weight:bold;
+}

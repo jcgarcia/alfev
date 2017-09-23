@@ -1,0 +1,64 @@
+<div class="page-header">
+    <h1>{{event.displayName}}</h1>
+    <h4 class="text-muted">{{event.shortDescription}}</h4>
+</div>
+<div class="alert alert-warning" data-ng-if="event.status !== 'PUBLIC'">
+    <h4>
+        <i class="fa fa-eye-slash"></i>
+        this event has not yet been published. Therefore only people who know the direct URL
+        (<a ng-href="{{eventPublicURL}}" target="_blank">{{eventPublicURL}}</a>) can see it.</h4>
+
+        <a class="btn btn-warning" ng-click="activateEvent(event.id)">Publish now</a>
+</div>
+<div uib-alert type="success" close="closeActivationAlert()" data-ng-if="eventHasBeenActivated">
+    <h4><i class="fa fa-info-circle"></i> Congratulations, this event has been successfully published! <a class="btn btn-default" ng-click="deactivateEvent(event.id)">Undo</a></h4>
+</div>
+<event-overview data-event="event"></event-overview>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <div class="row">
+                <div class="col-xs-9"><strong>Logistic info and description</strong></div>
+                <div class="col-xs-3"><div class="pull-right"><div data-ng-transclude=""></div></div></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-1 hide-overflowing-text hidden-xs hidden-sm">
+                <img data-ng-if="event.fileBlobIdIsPresent" data-ng-src="/file/{{event.fileBlobId}}" class="img-responsive event-logo">
+                <a href="{{event.imageUrl}}" data-ng-if="!event.fileBlobIdIsPresent" target="_blank">{{event.imageUrl}}</a>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <dl class="dl-horizontal">
+                    <dt>Public URL</dt>
+                    <dd><a ng-href="{{eventPublicURL}}" target="_blank">{{eventPublicURL}}</a></dd>
+                    <dt>Organized by</dt>
+                    <dd>{{organization.name}} &lt;{{organization.email}}&gt;</dd>
+                    <dt>Website URL</dt>
+                    <dd><a href="{{event.websiteUrl}}" target="_blank">{{event.websiteUrl}}</a></dd>
+                    <dt data-ng-if="!isInternal(event)">External URL</dt>
+                    <dd data-ng-if="!isInternal(event)"><a href="{{event.externalUrl}}" target="_blank">{{event.externalUrl}}</a></dd>
+                    <dt data-ng-if="isInternal(event)">T&C URL</dt>
+                    <dd data-ng-if="isInternal(event)"><a href="{{event.termsAndConditionsUrl}}" target="_blank">{{event.termsAndConditionsUrl}}</a></dd>
+                    <dt>Location</dt>
+                    <dd><a ng-href="{{event.geolocation.mapUrl}}" target="_blank">{{event.location}}</a></dd>
+                    <dt data-ng-if="isInternal(event)">Languages</dt>
+                    <dd data-ng-if="isInternal(event)"><span data-ng-repeat="cl in event.contentLanguages">{{cl.displayLanguage}}<span data-ng-if="!$last">, </span></span></dd>
+                    <dt>Start Date/Time</dt>
+                    <dd>{{event.formattedBegin | formatDate}}</dd>
+                    <dt>End Date/Time</dt>
+                    <dd>{{event.formattedEnd | formatDate}}</dd>
+                    <dt>Time Zone</dt>
+                    <dd>{{event.timeZone}}</dd>
+                </dl>
+            </div>
+            <div class="col-md-5 hidden-xs hidden-sm">
+                <div data-ng-repeat="cl in event.contentLanguages">
+                    <p class="text-muted"><display-commonmark-preview text="event.description[cl.locale]"></display-commonmark-preview> {{event.description[cl.locale]}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

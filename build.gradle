@@ -1,0 +1,336 @@
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.6.RELEASE")
+    }
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.8.1'
+    id 'com.github.ben-manes.versions' version '0.15.0'
+    id 'com.github.hierynomus.license' version '0.11.0'
+    id 'net.researchgate.release' version '2.6.0'
+}
+
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
+
+//as pointed out by @facundofarias, we should check minimum javac version in order to avoid problems with type inference mechanism during compilation
+task validate {
+    //check JDK version
+    def javaVersion = JavaVersion.current();
+    if (!javaVersion.isJava8Compatible()) {
+        throw new GradleException("A Java JDK 8+ is required to build the project.")
+    }
+    //check build number, but only if current java version is 8
+    if (javaVersion == JavaVersion.VERSION_1_8) {
+        def currentVersion = System.getProperty("java.version")
+        def matcher = java.util.regex.Pattern.compile("1(\\.\\d+){2}_(\\d+)").matcher(currentVersion)
+        if (!matcher.find()) {
+            throw new GradleException(currentVersion + " is not a recognized java version. Please report this issue.")
+        }
+        def buildNumber = Integer.parseInt(matcher.group(2))
+        if(buildNumber < 25) {
+            throw new GradleException(currentVersion + " is not a supported JDK version. Minimum version is 1.8.0b25. Please update your local JDK.")
+        }
+    }
+}
+
+war {
+    //generic excludes
+
+    def bowerDir = "resources/bower_components"
+    def excludesFile = new File("./lib_exclude")
+    if(excludesFile.exists()) {
+        exclude(excludesFile.readLines().collect({ bowerDir + it }));
+    }
+}
+
+idea {
+    project {
+        jdkName sourceCompatibility
+        languageLevel sourceCompatibility
+    }
+}
+
+def profile = project.hasProperty('profile') ? project.profile : 'dev'
+
+ext {
+    // default settings
+    jettyPort = 8080
+    jettyHost = '0.0.0.0'
+    datasourceDialect = 'HSQLDB'
+    datasourceDriver = 'org.hsqldb.jdbcDriver'
+    datasourceUrl = 'jdbc:hsqldb:mem:alfio'
+    datasourceUsername = 'sa'
+    datasourcePassword = ''
+    datasourceValidationQuery = 'SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS'
+    //springProfilesActive = 'dev,debug-csp' //enable csp report. FIXME For some reasons it doesn't work on Chrome
+    //springProfilesActive = 'dev,demo'
+    //springProfilesActive = 'dev,demo,jdbc-session'
+    springProfilesActive = 'dev'
+    baseImage = "openjdk:jre-alpine"
+    port = "8080"
+
+
+    // dockerfile template attributes
+
+
+
+    switch (profile) {
+        case 'dev-pgsql':
+            datasourceDialect = 'PGSQL'
+            datasourceDriver = 'org.postgresql.Driver'
+            datasourceUrl = 'jdbc:postgresql://localhost:5432/alfio'
+            datasourceUsername = 'postgres'
+            datasourcePassword = 'password'
+            datasourceValidationQuery = 'SELECT 1'
+            break
+        case 'dev-mysql':
+            datasourceDialect = 'MYSQL'
+            datasourceDriver = 'com.mysql.jdbc.Driver'
+            datasourceUrl = 'jdbc:mysql://localhost:3306/alfio'
+            datasourceUsername = 'root'
+            datasourcePassword = ''
+            datasourceValidationQuery = 'SELECT 1'
+            break
+        case 'docker-test':
+            datasourceDialect = 'PGSQL'
+            datasourceDriver = 'org.postgresql.Driver'
+            datasourceUrl = 'jdbc:postgresql://0.0.0.0:5432/postgres'
+            datasourceUsername = 'postgres'
+            datasourcePassword = 'postgres'
+            datasourceValidationQuery = 'SELECT 1'
+            break
+    }
+}
+
+configurations {
+    compileOnly
+    testCompileOnly
+    providedRuntime
+    providedCompile
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-context-support:$springVersion"
+    compile "org.springframework:spring-jdbc:$springVersion"
+    compile "org.springframework:spring-aop:$springVersion"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile "org.springframework.security:spring-security-web:$springSecurityConfigVersion"
+    compile "org.springframework.security:spring-security-config:$springSecurityConfigVersion"
+    compile 'org.springframework.session:spring-session:1.3.1.RELEASE'
+    compile "ch.digitalfondue.npjt-extra:npjt-extra:1.1.4"
+    compile "com.samskivert:jmustache:1.13"
+    compile "com.github.sps.mustache:mustache-spring-view:1.4"
+    compile "javax.mail:mail:1.5.0-b01"
+    compile "org.quartz-scheduler:quartz:2.3.0", {
+        exclude group: "com.zaxxer", module: "HikariCP-java6"
+        exclude group: "com.mchange", module: "c3p0"
+    }
+    compile 'com.moodysalem:LatLongToTimezoneMaven:1.2'
+    /**/
+    compile "com.openhtmltopdf:openhtmltopdf-core:0.0.1-RC11"
+    compile "com.openhtmltopdf:openhtmltopdf-pdfbox:0.0.1-RC11"
+    compile "com.openhtmltopdf:openhtmltopdf-jsoup-dom-converter:0.0.1-RC11"
+    /**/
+    compile "com.google.zxing:core:3.3.0"
+    compile "com.google.zxing:javase:3.3.0"
+    compile "org.flywaydb:flyway-core:4.2.0"
+    compile "org.postgresql:postgresql:42.1.3"
+    compile 'mysql:mysql-connector-java:5.1.42'
+    compile "com.zaxxer:HikariCP:2.6.3"
+    compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-jcl:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+    compile "com.stripe:stripe-java:5.7.1"
+    compile 'com.paypal.sdk:rest-api-sdk:1.13.1'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile "org.apache.commons:commons-lang3:3.5"
+    compile "com.opencsv:opencsv:3.10"
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'net.sf.biweekly:biweekly:0.6.1'
+    compile 'com.atlassian.commonmark:commonmark:0.9.0'
+    compile 'com.ryantenney.passkit4j:passkit4j:2.0.1'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.5.3'
+    compile 'de.danielbechler:java-object-diff:0.95-RC5'
+
+    testCompile "org.springframework:spring-test:$springVersion"
+    testCompile "com.insightfullogic:lambda-behave:0.3"
+
+    compileOnly "org.projectlombok:lombok:1.16.16"
+    testCompile "org.projectlombok:lombok:1.16.16"
+
+    compileOnly "javax.servlet:javax.servlet-api:3.1.0"
+    testCompile "javax.servlet:javax.servlet-api:3.1.0"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "net.sourceforge.htmlunit:htmlunit:2.26"
+    runtime "org.hsqldb:hsqldb:2.4.0"
+    runtime "commons-fileupload:commons-fileupload:1.3.3"
+    providedCompile "org.springframework.boot:spring-boot-starter-web@jar"
+    providedCompile "org.springframework.boot:spring-boot-starter@jar"
+    providedCompile "org.springframework.boot:spring-boot@jar"
+    providedCompile "org.springframework.boot:spring-boot-autoconfigure@jar"
+
+
+    providedCompile "org.springframework.boot:spring-boot-starter-jetty", {
+        exclude group: "org.eclipse.jetty.websocket", module: "websocket-server"
+        exclude group: "org.eclipse.jetty.websocket", module:"javax-websocket-server-impl"
+    }
+    providedRuntime "org.springframework.boot:spring-boot-starter-jetty", {
+        exclude group: "org.eclipse.jetty.websocket", module: "websocket-server"
+        exclude group: "org.eclipse.jetty.websocket", module:"javax-websocket-server-impl"
+    }
+}
+
+// -- license configuration
+
+license {
+    header = rootProject.file('config/HEADER')
+    strictCheck = true
+    ignoreFailures = false
+    mapping {
+        java = 'JAVADOC_STYLE'
+        sql = 'DOUBLEDASHES_STYLE'
+    }
+    ext.year = '2014-'+java.time.Year.now().toString()
+    include '**/*.java'
+    include '**/*.sql'
+}
+
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
+processResources {
+
+    doLast {
+
+        final gradleProperties = new File((File) it.destinationDir, 'application.properties')
+        final properties = new Properties()
+
+        assert gradleProperties.file
+
+        gradleProperties.withReader { properties.load(it) }
+        properties['alfio.version'] = project.version
+        properties['alfio.build-ts'] = ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+        gradleProperties.withWriter { properties.store(it, null) }
+    }
+}
+
+compileJava {
+    options.compilerArgs = ['-Xlint:all,-serial,-processing']
+}
+
+//propagate the system properties to the tests
+test {
+    systemProperties = System.getProperties()
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+        info.events = ["failed"]
+    }
+}
+
+
+bootRun {
+    def externalConfig = new File("./custom.jvmargs")
+    def opts = []
+    opts += [
+        "-Dspring.profiles.active=${project.springProfilesActive},jdbc-session",
+        "-Ddatasource.dialect=${project.datasourceDialect}",
+        "-Ddatasource.driver=${project.datasourceDriver}",
+        "-Ddatasource.url=${project.datasourceUrl}",
+        "-Ddatasource.username=${project.datasourceUsername}",
+        "-Ddatasource.password=${project.datasourcePassword}",
+        "-Ddatasource.validationQuery=${project.datasourceValidationQuery}",
+        "-Dalfio.version=${project.version}",
+        "-Dalfio.build-ts=${ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)}"
+    ]
+    if(externalConfig.exists()) {
+        opts += externalConfig.readLines()
+    }
+    jvmArgs = opts
+}
+
+bootRepackage {
+    mainClass = 'alfio.config.SpringBootLauncher'
+    classifier = 'boot'
+}
+
+
+// -- code-coverage
+
+jacoco {
+    toolVersion = '0.7.2.201409121644'
+}
+
+jacocoTestReport {
+    group = 'Reporting'
+    description = 'Generate Jacoco coverage reports after running tests.'
+    additionalSourceDirs = project.files(sourceSets.main.allSource.srcDirs)
+    sourceDirectories = project.files(sourceSets.main.allSource.srcDirs)
+    classDirectories =  project.files(sourceSets.main.output)
+    reports {
+        xml.enabled = true
+        csv.enabled = false
+        html.enabled = true
+    }
+}
+
+task dockerize(type: Copy) {
+    from 'src/main/dist/Dockerfile'
+    into "${buildDir}/dockerize"
+    filter(ReplaceTokens, tokens: [APP_NAME   : project.name,
+                                   APP_VERSION: project.version,
+                                   BASE_IMAGE : baseImage,
+                                   PORT       : port
+                                  ])
+}
+
+task distribution(type: Copy) {
+    from new File(project.buildDir, "libs/alfio-${project.version}-boot.war")
+    into "${buildDir}/dockerize"
+
+    dependsOn build, dockerize
+}
+
+release {
+    git {
+        requireBranch = ''
+        pushToRemote = 'origin'
+    }
+}
+
+jar {
+    doFirst {
+        manifest {
+            if (!configurations.compile.isEmpty()) {
+                attributes(
+                        'Class-Path': configurations.compile.collect{it.toURI().toString()}.join(' '),
+                        'Main-Class': 'alfio.config.SpringBootLauncher')
+            }
+        }
+    }
+}

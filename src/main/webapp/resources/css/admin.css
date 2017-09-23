@@ -1,0 +1,461 @@
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide:not(.ng-hide-animate) {
+  display: none !important;
+}
+
+ng\:form {
+  display: block;
+}
+
+@font-face {
+  font-family: 'Architects Daughter';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Architects Daughter'), local('ArchitectsDaughter'), url("../font/ArchitectsDaughter.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+div.menu-spacer {
+    padding-top:50px;
+}
+
+div.list-even {
+    background: #f5f5f5;
+    border-top: 1px solid #c0c0c0;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+div.category {
+    margin-bottom: 15px;
+    padding-top: 5px;
+    border: 1px solid #c0c0c0;
+}
+
+div.organization-description {
+    width:230px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+input.ng-invalid.ng-touched, select.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched,
+form.force-show-errors input.ng-invalid, form.force-show-errors select.ng-invalid, form.force-show-errors textarea.ng-invalid {
+    border:1px solid #d9534f;
+}
+
+field-error > div.text-danger {
+    display:none;
+}
+
+input.ng-invalid.ng-touched + field-error > div.text-danger,
+select.ng-invalid.ng-touched + field-error > div.text-danger,
+textarea.ng-invalid.ng-touched + field-error > div.text-danger,
+form.force-show-errors input.ng-invalid + field-error > div.text-danger,
+form.force-show-errors select.ng-invalid + field-error > div.text-danger,
+form.force-show-errors textarea.ng-invalid + field-error > div.text-danger {
+    display:block;
+}
+
+.progress {
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+.category-name {
+    margin-top:4px;
+}
+
+.category-danger {
+    border: 1px solid #d9534f;
+    border-left-width: 5px;
+    border-radius: 2px;
+}
+
+.category-warning {
+    border: 1px solid #f0ad4e;
+    border-left-width: 5px;
+    border-radius: 2px;
+}
+
+.category-info {
+    border: 1px solid #5bc0de;
+    border-left-width: 5px;
+    border-radius: 2px;
+}
+
+.category-success {
+    border: 1px solid #5cb85c;
+    border-left-width: 5px;
+    border-radius: 2px;
+}
+
+.category-expired {
+    border: 1px solid #545558;
+    border-left-width: 5px;
+    border-radius: 2px;
+}
+
+.category-active {
+    font-weight: bold;
+}
+
+a.icon, a.icon:hover {
+    text-decoration: none;
+}
+
+div.wMarginBottom {
+    margin-bottom: 25px;
+}
+
+.status-icon {
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+.drop-file-zone {
+    border: 1px dimgray dashed;
+}
+
+.drop-file-zone-hover {
+    border: 5px green dashed;
+}
+
+.to-uppercase {
+    text-transform: uppercase;
+}
+
+.video-container {
+    width:100%;
+    overflow: hidden;
+}
+
+.video-container video {
+    width: 100%;
+}
+
+span.user-detail {
+    font-size: 20px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+pre.white {
+    background-color: transparent;
+    border: none;
+}
+
+td.cell-wrap {
+    width:200px;
+    overflow-wrap: normal;
+}
+
+.event-statistic-highlighted {
+    font-size:3.5em;
+    font-weight: normal;
+}
+
+.icon-overview {
+    font-size: 5em !important;
+}
+
+/* for phone :D */
+@media screen and (max-width: 990px) {
+
+    table.check-in-data thead {
+      display: none;
+    }
+
+    table.check-in-data tr {
+      margin-bottom: 10px;
+      display: block;
+      border-top: 1px solid #ddd;
+    }
+
+    table.check-in-data tr:first-child {
+      border-top:none;
+    }
+
+    table.check-in-data td {
+      display: block;
+      text-align: right;
+      font-size: 13px;
+      min-height:2.5em;
+    }
+
+    table.check-in-data td:last-child {
+      border-bottom: 0;
+    }
+
+    table.check-in-data td:before {
+      content: attr(data-label);
+      float: left;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .event-statistic-highlighted {
+        font-size:1em;
+        font-weight: bold;
+    }
+    .icon-overview {
+        font-size: 1.5em !important;
+    }
+
+    .settings-label-top {
+        display: inline-block!important;
+    }
+
+    .refund-button {
+        margin-top: 10px;
+    }
+
+    .btn-block-xs {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (min-width: 991px) {
+
+    .setting input[type="text"], .setting input:not([type]), .setting textarea, .setting select {
+        padding-left: 85px;
+    }
+
+    .settings-label {
+        position: absolute;
+        left: 20px;
+        top: 9px;
+        width: 75px;
+    }
+
+    .category-conf .setting input[type="text"],
+    .category-conf .setting input:not([type]),
+    .category-conf .setting textarea,
+    .category-conf .setting select {
+        padding-left: 110px;
+    }
+
+    .category-conf .settings-label {
+        width: 90px;
+    }
+
+    .pull-right-md {
+        float: right !important;
+    }
+
+}
+
+.ngf-hide {
+    display:none !important
+}
+
+a[data-ng-click], a[ng-click] {
+    cursor: pointer;
+}
+
+a.emulate-nav-pills-link {
+    border-radius: 4px;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    color: #428bca;
+    text-decoration: none;
+    background: 0 0;
+}
+
+.emulate-nav-pills-link+.active > .badge {
+    color: #428bca;
+    background-color: #fff;
+}
+
+.emulate-nav-pills-link > a > .badge {
+    margin-left: 3px;
+}
+
+.emulate-nav-pills-link+.active,
+.emulate-nav-pills-link+.active :hover,
+.emulate-nav-pills-link+.active :focus {
+    color: #fff;
+    background-color: #428bca;
+}
+
+.emulate-nav-pills-link:hover,
+.emulate-nav-pills-link:focus {
+    text-decoration: none;
+    background-color: #eee;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-header img {
+    max-height: 60px;
+}
+
+.subitem-active {
+    font-weight: bolder;
+}
+
+.title {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 3em;
+    font-weight: 500;
+}
+
+.event-logo {
+    max-height: 200px;
+}
+
+.alert-form {
+    margin-top:28px;
+}
+
+/* pie chart */
+
+.tickets-pie-legend {
+    width:1em;
+    height:1em;
+    display: inline-block;
+}
+
+
+.tickets-pie-legend-text {
+    width:auto;
+    display: inline-block;
+}
+
+.slice-success {
+    fill: #5cb85c;
+    background-color: #5cb85c;
+    stroke:white;
+}
+.slice-warning {
+    fill: #f0ad4e;
+    background-color: #f0ad4e;
+    stroke:white;
+}
+.slice-info {
+    fill: #5bc0de;
+    background-color: #5bc0de;
+    stroke:white;
+}
+.slice-pending {
+    fill: #0408de;
+    background-color: #0408DE;
+    stroke:white;
+}
+.slice-danger {
+    fill: #d9534f;
+    background-color: #d9534f;
+    stroke:white;
+}
+.slice-default {
+    fill: #428bca;
+    background-color: #428bca;
+    stroke:white;
+    color:white;
+}
+
+.ct-label {
+    color: white;
+    fill: white;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.event-tw .ct-label {
+    color: black;
+    fill: black;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.event-tw .ct-series-a .ct-bar {
+    fill: #428bca;
+    stroke:#428bca;
+    color:white;
+}
+
+.event-tl .ct-label {
+    color: black;
+    fill: black;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+.event-tl .ct-point {
+    stroke-width: 6px;
+}
+.event-tl .ct-line {
+    stroke-width: 2px;
+}
+
+.event-tl .ct-series-a .ct-point, .event-tl .ct-series-a .ct-line {
+    stroke:#428bca;
+    color:white;
+}
+
+.hide-overflowing-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.map-container {
+    min-height: 360px;
+}
+
+.wMarginTop30px {
+    margin-top: 30px;
+}
+
+.wMarginTop10px {
+    margin-top: 10px;
+}
+
+.wMarginBottom30px {
+    margin-bottom: 30px;
+}
+
+.markdown-logo {
+    width: 16px;
+    height: 16px;
+}
+
+.markdown-help {
+    padding-left: 5px;
+}
+
+.markdown-help a {
+    font-size: 12px;
+}
+
+.ace_editor {
+    border-left: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    margin-top: 5px;
+    width: 100%;
+    height: 500px;
+}
+
+.modal-min-1200 {
+    min-width:1200px;
+}
+
+.event-list-logo {
+    max-width: 64px;
+    height: auto;
+}
+
+canvas.qrcode {
+    margin-top: 20px;
+    position: relative;
+    left: -18px;
+}
